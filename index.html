@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<script>
+  (function() {
+    var GA_ID = 'G-X3D5LHK698';
+    var isLocalDev = ['localhost', '127.0.0.1', '[::1]', ''].includes(location.hostname);
+    if (isLocalDev || GA_ID === 'G-PENDING') return;
+    try { if (/[?&]no_ga=0(&|$)/.test(location.search)) localStorage.removeItem('no_ga'); if (/[?&]no_ga=1(&|$)/.test(location.search)) localStorage.setItem('no_ga', '1'); if (localStorage.getItem('no_ga') === '1') return; } catch (e) {}
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+    document.head.appendChild(s);
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function(){ dataLayer.push(arguments); };
+    gtag('js', new Date());
+    gtag('config', GA_ID);
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>同人誌の入稿データチェック(無料)|サイズ・解像度・ページ数・連番を一括確認 - 入稿まえチェッカー</title>
+<meta name="description" content="インストール・登録不要。同人誌の原稿(PNG・JPEG・PSD・PDF)を読み込むだけで、塗り足し込みのサイズ・解像度・カラーモード・製本ごとのページ数・ファイル名の連番の抜けを一覧で確かめられる無料ツール。小説本のPDFは、ページの大きさとフォントの埋め込みも見ます。原稿ファイルはブラウザの中だけで処理し、外に送りません。">
+<link rel="canonical" href="https://uuhai0625.github.io/nyuko-checker/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:site_name" content="uuhai0625のツール">
+<meta property="og:title" content="同人誌の入稿データチェック(無料)- 入稿まえチェッカー">
+<meta property="og:description" content="原稿を読み込むだけで、サイズ・解像度・ページ数・連番の抜けを一覧で確認。インストール不要、原稿ファイルは外に送りません。">
+<meta property="og:url" content="https://uuhai0625.github.io/nyuko-checker/">
+<meta property="og:image" content="https://uuhai0625.github.io/nyuko-checker/og.png">
+<meta property="og:image:alt" content="入稿まえチェッカー 同人誌の原稿データを入稿前にチェック">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "入稿まえチェッカー",
+  "url": "https://uuhai0625.github.io/nyuko-checker/",
+  "description": "同人誌の原稿データ(PNG・JPEG・PSD・PDF)の、塗り足し込みのサイズ・解像度・カラーモード・ページ数・ファイル名の連番を入稿前に確かめる無料ツール。",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Web",
+  "inLanguage": "ja",
+  "dateModified": "2026-11-20",
+  "isAccessibleForFree": true,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "JPY" },
+  "author": { "@type": "Person", "name": "uuhai0625", "url": "https://x.com/uuhai0625" }
+}
+</script>
+<style>
+  :root {
+    --bg: #f4f4ef;
+    --panel: #ffffff;
+    --border: #dfdccf;
+    --field-border: #8a877a;
+    --text: #2a2c2a;
+    --muted: #5c5e56;
+    --accent: #2f5d50;
+    --accent-dark: #22463c;
+    --soft: #edf3f0;
+    --ok-bg: #e8f3ec;
+    --ok-text: #1d5c36;
+    --warn-bg: #fff4e0;
+    --warn-text: #7a4b00;
+    --err-bg: #fdecec;
+    --err-text: #9b1c1c;
+    --focus: #2560c4;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+  }
+  header {
+    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+    color: #fff;
+    padding: 24px 20px 18px;
+    text-align: center;
+  }
+  header h1 { margin: 0 0 6px; font-size: 1.45rem; }
+  header p { margin: 0; opacity: .95; font-size: .92rem; }
+  main { max-width: 900px; margin: 0 auto; padding: 22px 16px 50px; }
+  section.panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 18px 14px;
+    margin-bottom: 18px;
+  }
+  h2 { font-size: 1.1rem; margin: 0 0 10px; }
+  h3 { font-size: 1rem; margin: 16px 0 6px; }
+  fieldset { border: 0; margin: 0 0 12px; padding: 0; min-width: 0; }
+  legend { font-weight: bold; margin-bottom: 4px; padding: 0; }
+  .choices { display: flex; flex-wrap: wrap; gap: 6px 10px; }
+  .choices label {
+    display: inline-flex; align-items: center; gap: 6px;
+    min-height: 44px; padding: 4px 12px;
+    border: 1px solid var(--field-border); border-radius: 8px; background: #fff; cursor: pointer;
+  }
+  .choices label:has(input:checked) { border: 2px solid var(--accent); background: var(--soft); font-weight: bold; }
+  .choices input { margin: 0; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 4px 20px; }
+  select, input[type="number"] {
+    font: inherit; min-height: 44px; padding: 4px 8px;
+    border: 1px solid var(--field-border); border-radius: 8px; background: #fff; color: var(--text);
+  }
+  input[type="number"] { width: 6.5em; }
+  input[aria-invalid="true"] { border: 2px solid var(--err-text); }
+  .hint { font-size: .84rem; color: var(--muted); margin: 4px 0 0; }
+  .hint.bad { color: var(--err-text); font-weight: bold; }
+  #customSize { margin-top: 8px; }
+  #customSize[hidden] { display: none; }
+  .drop {
+    border: 2px dashed var(--field-border); border-radius: 12px; background: var(--soft);
+    padding: 22px 14px; text-align: center;
+  }
+  .drop.over { border-color: var(--accent); background: #dfece6; }
+  .drop p { margin: 0 0 10px; }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-height: 44px; padding: 0 18px; margin: 4px;
+    border: 0; border-radius: 8px; background: var(--accent); color: #fff;
+    font: inherit; font-weight: bold; cursor: pointer;
+  }
+  .btn.sub { background: #fff; color: var(--accent); border: 1px solid var(--accent); }
+  .btn:hover { background: var(--accent-dark); }
+  .btn.sub:hover { background: var(--soft); }
+  :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .sr:focus-visible + .btn { outline: 3px solid var(--focus); outline-offset: 2px; }
+  #status { margin: 10px 0 0; font-size: .92rem; font-weight: bold; }
+  .notice {
+    border-left: 4px solid var(--warn-text); background: var(--warn-bg);
+    padding: 10px 14px; border-radius: 6px; font-size: .88rem; margin: 0 0 14px;
+  }
+  .summary { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; padding: 0; list-style: none; }
+  .summary li { padding: 4px 12px; border-radius: 999px; font-weight: bold; font-size: .9rem; }
+  .lv-err { background: var(--err-bg); color: var(--err-text); }
+  .lv-warn { background: var(--warn-bg); color: var(--warn-text); }
+  .lv-ok { background: var(--ok-bg); color: var(--ok-text); }
+  .lv-info { background: #eef1f6; color: #33415c; }
+  ul.msgs { list-style: none; margin: 0; padding: 0; }
+  ul.msgs li { margin: 4px 0; padding: 6px 10px; border-radius: 6px; font-size: .9rem; }
+  ul.msgs li strong { margin-right: 6px; }
+  .table-wrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: .86rem; }
+  th, td { border-bottom: 1px solid var(--border); padding: 6px 8px; text-align: left; vertical-align: top; }
+  thead th { background: #f7f6f1; white-space: nowrap; }
+  tbody th { font-weight: normal; word-break: break-all; max-width: 220px; }
+  td ul.msgs li { padding: 3px 8px; font-size: .84rem; }
+  .badge { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: .8rem; font-weight: bold; white-space: nowrap; }
+  .cant ul, .howto ol, .related ul { margin: 0; padding-left: 1.3em; }
+  .cant li, .howto li { margin: 3px 0; }
+  .related a { color: var(--accent-dark); }
+  footer { text-align: center; font-size: .82rem; color: var(--muted); padding: 10px 16px 30px; }
+  footer a { color: inherit; }
+  @media (max-width: 600px) {
+    header h1 { font-size: 1.25rem; }
+    section.panel { padding: 14px 12px 10px; }
+    /* スマホでは表をカード型にする */
+    table, tbody, tr, th, td { display: block; width: 100%; max-width: none; }
+    thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    tbody tr { border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px; padding: 4px 0; }
+    tbody th, tbody td { border: 0; padding: 4px 10px; }
+    tbody th { font-weight: bold; }
+    tbody td[data-label]::before { content: attr(data-label) ": "; color: var(--muted); font-size: .8rem; }
+  }
+  @media print {
+    header, .drop, #settings, .howto, .related, footer, .btn { display: none !important; }
+    body { background: #fff; }
+    section.panel { border: 0; padding: 0; }
+  }
+</style>
+<!--ANSHIN_CSS_START--><style>:root{--anshin-w:868px;--anshin-pad:16px}.anshin-strip,.anshin{box-sizing:border-box;width:min(var(--anshin-w),calc(100% - 2 * var(--anshin-pad)));margin-left:auto;margin-right:auto}.anshin-strip{list-style:none;margin-top:10px;margin-bottom:0;padding:0;display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;font-size:.8rem;line-height:1.5}.anshin-strip li{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border:1px solid rgba(20,120,90,.45);border-radius:999px;background:rgba(20,120,90,.07)}.anshin-strip li.anshin-more{border:0;background:none;padding:3px 2px}.anshin-strip a,.anshin a{color:inherit}.anshin{margin-top:18px;margin-bottom:18px;padding:14px 18px;border:1px solid rgba(20,120,90,.45);border-radius:10px;background:rgba(20,120,90,.05);font-size:.86rem;line-height:1.7}.anshin h2{font-size:1rem;margin:0 0 6px}.anshin p{margin:0 0 6px}.anshin ul{margin:0;padding-left:1.2em}.anshin li{margin:3px 0}.anshin details{margin-top:6px}.anshin summary{cursor:pointer;font-weight:bold}.anshin .anshin-meta{margin:8px 0 0;font-size:.8rem;opacity:.85}@media print{.anshin,.anshin-strip{display:none!important}}</style><!--ANSHIN_CSS_END-->
+</head>
+<body>
+<header>
+  <h1>入稿まえチェッカー</h1>
+  <p>同人誌の原稿データを読み込むだけで、サイズ・解像度・ページ数・連番の抜けを一覧にします。インストール・登録不要の無料ツールです</p>
+</header>
+<!--ANSHIN_STRIP_START-->
+<ul class="anshin-strip" aria-label="データの扱い">
+  <li><span aria-hidden="true">✓</span> 入力内容はこの端末の中だけで処理</li>
+  <li><span aria-hidden="true">✓</span> 登録・ログイン不要</li>
+  <li><span aria-hidden="true">✓</span> 仕組みを公開中</li>
+  <li class="anshin-more"><a href="#anshin">データの扱いをくわしく</a></li>
+</ul>
+<!--ANSHIN_STRIP_END-->
+<main>
+  <section class="panel" aria-labelledby="fileTitle">
+    <h2 id="fileTitle">1. 原稿を読み込む</h2>
+    <div class="drop" id="drop">
+      <p>本文の原稿ファイル(PNG・JPEG・PSD・PDF)を、ここにまとめてドラッグ&ドロップ</p>
+      <input type="file" id="fileInput" class="sr" multiple accept=".png,.jpg,.jpeg,.psd,.psb,.pdf,.tif,.tiff,.clip,image/png,image/jpeg,application/pdf">
+      <label class="btn" for="fileInput">ファイルを選ぶ</label>
+      <input type="file" id="dirInput" class="sr" webkitdirectory multiple>
+      <label class="btn sub" for="dirInput" id="dirLabel">フォルダごと選ぶ</label>
+      <p class="hint">原稿ファイルの中身やファイル名は、インターネットへ送ったり保存したりしません(このブラウザの中だけで読みます)。フォルダを選ぶとブラウザが「アップロード」と表示しますが、実際には送りません。</p>
+      <p class="hint">表紙(名前に「表紙」「表1」「cover」「h1」などが入ったもの)と口絵(「口絵」「kuchie」)は、本文のページ数とサイズの判定から外します。設定は下で、あとから変えても結果がすぐ変わります。</p>
+    </div>
+    <p id="status" role="status" aria-live="polite"></p>
+  </section>
+
+  <section class="panel" id="settings" aria-labelledby="settingsTitle">
+    <h2 id="settingsTitle">2. 本の設定</h2>
+    <div class="grid">
+      <fieldset>
+        <legend>原稿の種類</legend>
+        <div class="choices">
+          <label><input type="radio" name="kind" value="manga" checked> 漫画・イラスト</label>
+          <label><input type="radio" name="kind" value="novel"> 小説(文字だけ)</label>
+        </div>
+        <p class="hint" id="kindHint">絵が紙の端まである漫画は、塗り足し込みのサイズで作ります。</p>
+      </fieldset>
+      <fieldset>
+        <legend>本文の色</legend>
+        <div class="choices">
+          <label><input type="radio" name="color" value="mono" checked> モノクロ</label>
+          <label><input type="radio" name="color" value="color"> カラー</label>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend><label for="size">仕上がりサイズ</label></legend>
+        <select id="size">
+          <option value="A5" selected>A5(148×210mm)</option>
+          <option value="B5">B5(182×257mm)</option>
+          <option value="A4">A4(210×297mm)</option>
+          <option value="B6">B6(128×182mm)</option>
+          <option value="A6">文庫・A6(105×148mm)</option>
+          <option value="shinsho">新書(印刷所で大きさが違う)</option>
+          <option value="custom">その他(mmを入れる)</option>
+        </select>
+        <div id="customSize" hidden>
+          <label>横 <input type="number" id="customW" min="30" max="600" step="0.1" aria-describedby="customHint"> mm</label>
+          <label>縦 <input type="number" id="customH" min="30" max="600" step="0.1" aria-describedby="customHint"> mm</label>
+          <p class="hint" id="customHint">仕上がり(切ったあと)の大きさを入れてください。</p>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>塗り足し(1辺あたり)</legend>
+        <div class="choices">
+          <label><input type="radio" name="bleed" value="3" checked> 3mm</label>
+          <label><input type="radio" name="bleed" value="5"> 5mm</label>
+        </div>
+        <p class="hint">多くの印刷所は3mmです。</p>
+      </fieldset>
+      <fieldset>
+        <legend>製本</legend>
+        <div class="choices">
+          <label><input type="radio" name="bind" value="perfect" checked> 無線綴じ</label>
+          <label><input type="radio" name="bind" value="saddle"> 中綴じ(ホチキス)</label>
+        </div>
+      </fieldset>
+    </div>
+  </section>
+
+  <section class="panel" id="results" aria-labelledby="resultTitle" hidden>
+    <h2 id="resultTitle">3. チェック結果</h2>
+    <p class="notice">このチェックは、原稿データの見落としに気づくための目安です。トンボ・文字の位置・色味・背幅・ノンブルなど、判定できないこともあります。「OK」でも入稿できることを保証するものではないので、最後は必ず、使う印刷所の入稿ガイドで確かめてください。</p>
+    <ul class="summary" id="summary"></ul>
+    <h3>ページ数</h3>
+    <ul class="msgs" id="pageMsgs"></ul>
+    <h3>ファイル名と順番</h3>
+    <ul class="msgs" id="nameMsgs"></ul>
+    <h3>ファイルごとの結果</h3>
+    <div class="table-wrap" tabindex="0" role="region" aria-label="ファイルごとの結果の表">
+      <table>
+        <thead><tr><th scope="col">ファイル</th><th scope="col">形式</th><th scope="col">大きさ</th><th scope="col">色</th><th scope="col">判定</th></tr></thead>
+        <tbody id="fileRows"></tbody>
+      </table>
+    </div>
+    <p><button type="button" class="btn sub" id="clearBtn">読み込んだファイルを消す</button></p>
+  </section>
+
+  <section class="panel cant" aria-labelledby="cantTitle">
+    <h2 id="cantTitle">このツールで見ること・見ないこと</h2>
+    <h3>見ること</h3>
+    <ul>
+      <li>大きさ: 画像のピクセル数とdpiから、塗り足し込みのサイズに合っているかと、実際の解像度を出します。dpiの数値が72のまま(スマホのアプリなど)でも、ピクセル数で判定します</li>
+      <li>解像度の目安: カラー350dpi、グレー600dpi(300dpi以上なら注意どまり)、モノクロ2階調600dpi</li>
+      <li>色: RGB・CMYK・グレー・モノクロ2階調のどれか、透明な部分が残っていないか</li>
+      <li>ページ数: 表紙の4ページを足した総ページ数が、製本の決まり(中綴じは4の倍数など)に合っているか</li>
+      <li>ファイル名: 連番の抜け・重なり・桁のばらつき、全角文字やスペース(「05-48.pdf」のような範囲の名前にも対応)</li>
+      <li>PDF: ページの大きさ(仕上がり線があればその大きさ)、塗り足し、ページ数、埋め込まれていないフォント</li>
+      <li>PSD: レイヤーが残っていないか、16bitになっていないか</li>
+    </ul>
+    <h3>見ないこと</h3>
+    <ul>
+      <li>ノンブル(ページ番号)、白紙ページ、文字が仕上がり線に近すぎないか</li>
+      <li>トンボの位置、色の再現、背幅、表紙のサイズ</li>
+      <li>PDFの中の画像の解像度、TIFFとクリスタ(.clip)の中身</li>
+      <li>印刷所ごとの細かな決まり(受け付ける形式、ページ数の単位、ファイル名の桁など)</li>
+    </ul>
+  </section>
+
+  <section class="panel howto" aria-labelledby="howtoTitle">
+    <h2 id="howtoTitle">使い方</h2>
+    <ol>
+      <li>本文の原稿ファイルをまとめて読み込みます。フォルダごとでも選べます</li>
+      <li>本の設定(漫画か小説か、本文の色、仕上がりサイズ、塗り足し、製本)を選びます</li>
+      <li>赤(要確認)と黄(注意)を直して、直したファイルをもう一度読み込みます。同じ名前のファイルは新しい方に入れ替わります</li>
+    </ol>
+    <p class="hint">小説本で本文をPDF1つにまとめた場合も、そのPDFを読み込めば、ページ数・ページの大きさ・フォントの埋め込みを見ます。小説の本文は塗り足しなしの仕上がりサイズで入稿できる印刷所が多いので、「小説」を選ぶと仕上がりサイズもOKにします。</p>
+  </section>
+
+  <section class="panel related" aria-labelledby="relTitle">
+    <h2 id="relTitle">同人誌づくりの関連ツール</h2>
+    <ul>
+      <li><a href="https://uuhai0625.github.io/daiwari-maker/">台割作成ツール</a>(ページの並びを決める)</li>
+      <li><a href="https://uuhai0625.github.io/genko-page-calc/">原稿用紙換算・小説ページ数計算</a>(文字数からページ数を出す)</li>
+      <li><a href="https://uuhai0625.github.io/sehaba-calc/">同人誌 背幅計算</a>(表紙の背幅を出す)</li>
+    </ul>
+  </section>
+</main>
+<!--ANSHIN_START-->
+<section class="anshin" id="anshin" aria-labelledby="anshin-title">
+  <h2 id="anshin-title">データの扱いについて</h2>
+  <p>このページには、入力した内容を受け取る仕組みがありません。文字も画像も、あなたのスマホやパソコンの中だけで処理されます。</p>
+  <ul>
+    <li>画像などのファイルを選んでも、アップロードはされません。端末の中で読み込んで処理します。</li>
+    <li>会員登録・ログイン・メールアドレスの入力はありません。</li>
+    <li>自分で確かめたい方へ: ページを開いたあと機内モードにしても、そのまま使えます。</li>
+  </ul>
+  <details>
+    <summary>もっとくわしく(保存・アクセス解析・公開について)</summary>
+    <ul>
+      <li>アクセス解析(Google Analytics)のため、見たページのURL・参照元・端末やブラウザの種類・おおよその地域(IPアドレスから推定)・Cookieの識別子・BOOTHへのリンクのクリック・どのボタンを押したか(回数や選んだ設定を含む)がGoogleに送られます。目的は利用状況の把握です。入力した文字や画像は送りません。(<a href="https://policies.google.com/technologies/partner-sites?hl=ja" target="_blank" rel="noopener">Googleによるデータの使用</a>/<a href="https://tools.google.com/dlpage/gaoptout?hl=ja" target="_blank" rel="noopener">計測を止めるアドオン</a>。止めてもツールはそのまま使えます)</li>
+      <li>チェック結果は目安です。入稿の前には、使う印刷所の入稿ガイドで最終確認してください。原稿ファイルの中身・ファイル名・チェック結果はGoogleにも送りません。</li>
+      <li>処理の中身はすべて公開しています(詳しい方向け: <a href="https://github.com/uuhai0625/nyuko-checker" target="_blank" rel="noopener">GitHub</a>)。</li>
+    </ul>
+  </details>
+  <p class="anshin-meta">作っている人: ウーハイ(個人開発)/不具合・ご質問は<a href="https://x.com/uuhai0625" target="_blank" rel="noopener">X(@uuhai0625)</a>へ/<a href="https://uuhai0625.github.io/" target="_blank" rel="noopener">ほかのツール</a>/この説明の更新日: 2026-11-20</p>
+</section>
+<!--ANSHIN_END-->
+
+<footer>
+  <p>作成: uuhai0625 ・ 判定の基準は、2026年11月20日時点の主な同人誌印刷所の入稿ガイドをもとにした目安です。各印刷所とは関係ありません。</p>
+  <p>PDFの読み込みに <a href="vendor/pdf-lib-LICENSE.txt">pdf-lib</a>(MITライセンス)を使っています。</p>
+</footer>
+
+<script>
+(function() {
+  'use strict';
+
+  var SIZES = {
+    A5: [148, 210], B5: [182, 257], A4: [210, 297], B6: [128, 182], A6: [105, 148]
+  };
+  var MM_PER_INCH = 25.4;
+  var EXTS = ['png', 'jpg', 'jpeg', 'psd', 'psb', 'pdf', 'tif', 'tiff', 'clip'];
+  var PDF_MAX = 400 * 1024 * 1024;
+  var items = [];      // 読み込んだファイルの情報(判定前)
+  var queue = Promise.resolve();
+  var pdfLibLoading = null;
+
+  // ---------- 小さな道具 ----------
+  function $(id) { return document.getElementById(id); }
+  function radio(name) { var el = document.querySelector('input[name="' + name + '"]:checked'); return el ? el.value : ''; }
+  function esc(s) { return String(s).replace(/[&<>"']/g, function(c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function track(name, params) { if (window.gtag) window.gtag('event', name, params || {}); }
+  function fail(msg) { var e = new Error(msg); e.userMsg = true; return e; }
+  function readBytes(file, start, end) {
+    return file.slice(start, end).arrayBuffer().then(function(b) { return new Uint8Array(b); });
+  }
+  function need(b, n, what) { if (b.length < n) throw fail(what + 'の途中でファイルが切れています'); return b; }
+  function u16(b, o, le) { return le ? (b[o] | (b[o + 1] << 8)) : ((b[o] << 8) | b[o + 1]); }
+  function u32(b, o, le) {
+    return le ? ((b[o] | (b[o + 1] << 8) | (b[o + 2] << 16)) + b[o + 3] * 16777216)
+              : (b[o] * 16777216 + ((b[o + 1] << 16) | (b[o + 2] << 8) | b[o + 3]));
+  }
+  function ascii(b, o, n) { var s = ''; for (var i = 0; i < n && o + i < b.length; i++) s += String.fromCharCode(b[o + i]); return s; }
+  function round1(x) { return Math.round(x * 10) / 10; }
+  function ext(name) { var m = /\.([^.]+)$/.exec(name); return m ? m[1].toLowerCase() : ''; }
+  function checkDims(info, what) { if (!(info.w > 0 && info.h > 0)) throw fail(what + 'の縦横の大きさが読めません'); }
+
+  // ---------- 形式ごとの読み取り(ヘッダーだけ) ----------
+  function parsePNG(file) {
+    var info = { format: 'PNG' };
+    return readBytes(file, 0, 33).then(function(b) {
+      need(b, 33, 'PNG');
+      if (ascii(b, 1, 3) !== 'PNG' || ascii(b, 12, 4) !== 'IHDR') throw fail('PNGとして読めませんでした');
+      info.w = u32(b, 16); info.h = u32(b, 20);
+      checkDims(info, 'PNG');
+      var depth = b[24], ct = b[25];
+      info.bits = depth;
+      info.alpha = (ct === 4 || ct === 6);
+      if (ct === 0) info.mode = depth === 1 ? 'bitmap' : 'gray';
+      else if (ct === 4) info.mode = 'gray';
+      else if (ct === 3) info.mode = 'indexed';
+      else info.mode = 'rgb';
+      var off = 33;
+      function next() {
+        if (off + 8 > file.size) return Promise.resolve(info);
+        return readBytes(file, off, off + 8).then(function(h) {
+          var len = u32(h, 0), type = ascii(h, 4, 4);
+          if (type === 'IDAT' || type === 'IEND') return info;
+          var p = Promise.resolve();
+          if (type === 'pHYs') {
+            p = readBytes(file, off + 8, off + 17).then(function(d) {
+              if (d.length >= 9 && d[8] === 1) { info.dpiX = u32(d, 0) * 0.0254; info.dpiY = u32(d, 4) * 0.0254; }
+            });
+          } else if (type === 'PLTE' && ct === 3) {
+            p = readBytes(file, off + 8, off + 8 + Math.min(len, 768)).then(function(d) {
+              var grayOnly = true;
+              for (var i = 0; i + 2 < d.length; i += 3) if (d[i] !== d[i + 1] || d[i] !== d[i + 2]) { grayOnly = false; break; }
+              if (grayOnly) info.mode = d.length <= 6 ? 'bitmap' : 'gray';
+            });
+          } else if (type === 'tRNS') {
+            if (ct === 3) {
+              p = readBytes(file, off + 8, off + 8 + Math.min(len, 256)).then(function(d) {
+                for (var i = 0; i < d.length; i++) if (d[i] < 255) { info.alpha = true; break; }
+              });
+            } else info.alpha = true;
+          }
+          off += 12 + len;
+          return p.then(next);
+        });
+      }
+      return next();
+    });
+  }
+
+  function parseJPEG(file) {
+    var info = { format: 'JPEG', alpha: false };
+    var off = 2;
+    var exifDpi = null, jfifDpi = null, psDpi = null, orient = 1;
+    return readBytes(file, 0, 2).then(function(b) {
+      if (b.length < 2 || b[0] !== 0xFF || b[1] !== 0xD8) throw fail('JPEGとして読めませんでした');
+      function next() {
+        if (off + 4 > file.size) throw fail('JPEGの大きさが読めませんでした');
+        return readBytes(file, off, off + 4).then(function(h) {
+          if (h[0] !== 0xFF) throw fail('JPEGの中身が読めませんでした');
+          var m = h[1];
+          if (m === 0xFF) { off += 1; return next(); }
+          if (m === 0xD8 || m === 0x01 || (m >= 0xD0 && m <= 0xD7)) { off += 2; return next(); }
+          var len = u16(h, 2);
+          var segStart = off + 4, segEnd = off + 2 + len;
+          off = segEnd;
+          var isSOF = m >= 0xC0 && m <= 0xCF && m !== 0xC4 && m !== 0xC8 && m !== 0xCC;
+          if (isSOF) {
+            return readBytes(file, segStart, segStart + 6).then(function(d) {
+              need(d, 6, 'JPEG');
+              info.bits = d[0]; info.h = u16(d, 1); info.w = u16(d, 3);
+              checkDims(info, 'JPEG');
+              var nf = d[5];
+              info.mode = nf === 1 ? 'gray' : nf === 4 ? 'cmyk' : 'rgb';
+              if (orient >= 5 && orient <= 8) { var t = info.w; info.w = info.h; info.h = t; }
+              // Photoshopと同じ順(8BIM → JFIF → EXIF)で採用する
+              var dpi = psDpi || jfifDpi || exifDpi;
+              if (dpi) { info.dpiX = dpi[0]; info.dpiY = dpi[1]; }
+              var all = [psDpi, jfifDpi, exifDpi].filter(Boolean);
+              info.dpiConflict = all.some(function(d) { return Math.abs(d[0] - all[0][0]) > 1; });
+              return info;
+            });
+          }
+          if (m === 0xE0 || m === 0xE1 || m === 0xED) {
+            var want = Math.min(segEnd, segStart + (m === 0xE0 ? 32 : 65536));
+            return readBytes(file, segStart, want).then(function(d) {
+              if (m === 0xE0 && ascii(d, 0, 5) === 'JFIF\0' && d.length >= 12) {
+                var unit = d[7], x = u16(d, 8), y = u16(d, 10);
+                if (unit === 1) jfifDpi = [x, y];
+                else if (unit === 2) jfifDpi = [x * 2.54, y * 2.54];
+              } else if (m === 0xE1 && ascii(d, 0, 6) === 'Exif\0\0') {
+                var r = readExif(d.subarray(6));
+                if (r.dpi) exifDpi = r.dpi;
+                if (r.orient) orient = r.orient;
+              } else if (m === 0xED && ascii(d, 0, 13) === 'Photoshop 3.0') {
+                var res = findPsResolution(d, 14, d.length);
+                if (res) psDpi = res;
+              }
+              return next();
+            });
+          }
+          if (m === 0xD9 || m === 0xDA) throw fail('JPEGの大きさが読めませんでした');
+          return next();
+        });
+      }
+      return next();
+    });
+  }
+
+  function readExif(t) {
+    var r = {};
+    if (t.length < 8) return r;
+    var le = ascii(t, 0, 2) === 'II';
+    var ifd = u32(t, 4, le);
+    if (ifd + 2 > t.length) return r;
+    var n = u16(t, ifd, le), xr = null, yr = null, unit = 2;
+    for (var i = 0; i < n; i++) {
+      var e = ifd + 2 + i * 12;
+      if (e + 12 > t.length) break;
+      var tag = u16(t, e, le), valOff = u32(t, e + 8, le);
+      if (tag === 0x011A || tag === 0x011B) {
+        if (valOff + 8 <= t.length) {
+          var den = u32(t, valOff + 4, le);
+          var v = den ? u32(t, valOff, le) / den : 0;
+          if (tag === 0x011A) xr = v; else yr = v;
+        }
+      } else if (tag === 0x0128) unit = u16(t, e + 8, le);
+      else if (tag === 0x0112) r.orient = u16(t, e + 8, le);
+    }
+    if (xr && unit !== 1) {
+      var k = unit === 3 ? 2.54 : 1;
+      r.dpi = [xr * k, (yr || xr) * k];
+    }
+    return r;
+  }
+
+  // Photoshopの画像リソース(8BIM)から解像度(0x03ED)を探す
+  function findPsResolution(d, start, end) {
+    var p = start;
+    while (p + 12 <= end) {
+      if (ascii(d, p, 4) !== '8BIM') break;
+      var id = u16(d, p + 4);
+      var nameLen = d[p + 6];
+      var q = p + 6 + 1 + nameLen;
+      if ((1 + nameLen) % 2) q++;
+      if (q + 4 > end) break;
+      var size = u32(d, q);
+      var data = q + 4;
+      if (id === 0x03ED && data + 12 <= end) {
+        return [u32(d, data) / 65536, u32(d, data + 8) / 65536];
+      }
+      p = data + size + (size % 2);
+    }
+    return null;
+  }
+
+  var PSD_MODES = { 0: 'bitmap', 1: 'gray', 2: 'indexed', 3: 'rgb', 4: 'cmyk', 7: 'multi', 8: 'duotone', 9: 'lab' };
+  function parsePSD(file) {
+    var info = { format: 'PSD' };
+    return readBytes(file, 0, 30).then(function(b) {
+      need(b, 30, 'PSD');
+      if (ascii(b, 0, 4) !== '8BPS') throw fail('PSDとして読めませんでした');
+      var ver = u16(b, 4);
+      if (ver === 2) info.format = 'PSB';
+      var ch = u16(b, 12);
+      info.h = u32(b, 14); info.w = u32(b, 18);
+      checkDims(info, 'PSD');
+      info.bits = u16(b, 22);
+      info.mode = PSD_MODES[u16(b, 24)] || 'other';
+      var base = { bitmap: 1, gray: 1, indexed: 1, rgb: 3, cmyk: 4, duotone: 1, lab: 3 }[info.mode];
+      info.extraCh = base ? ch > base : false;
+      var cmLen = u32(b, 26);
+      var resLenOff = 30 + cmLen;
+      return readBytes(file, resLenOff, resLenOff + 4).then(function(l) {
+        need(l, 4, 'PSD');
+        var resLen = u32(l, 0);
+        var resStart = resLenOff + 4;
+        return readBytes(file, resStart, resStart + resLen).then(function(d) {
+          var dpi = findPsResolution(d, 0, d.length);
+          if (dpi) { info.dpiX = dpi[0]; info.dpiY = dpi[1]; }
+          var lmOff = resStart + resLen;
+          var big = ver === 2;
+          return readBytes(file, lmOff, lmOff + (big ? 18 : 10)).then(function(m) {
+            if (m.length < (big ? 18 : 10)) return info;
+            var lmLen = big ? u32(m, 4) + u32(m, 0) * 4294967296 : u32(m, 0);
+            if (lmLen > 0) {
+              var liLen = big ? u32(m, 12) + u32(m, 8) * 4294967296 : u32(m, 4);
+              if (liLen > 0) {
+                var cnt = u16(m, big ? 16 : 8);
+                if (cnt > 32767) cnt = 65536 - cnt;
+                info.layers = cnt;
+              }
+            }
+            return info;
+          });
+        });
+      });
+    });
+  }
+
+  // ---------- PDF(pdf-libを必要なときだけ読む) ----------
+  function loadPdfLib() {
+    if (window.PDFLib) return Promise.resolve(window.PDFLib);
+    if (!pdfLibLoading) {
+      pdfLibLoading = new Promise(function(resolve, reject) {
+        var s = document.createElement('script');
+        s.src = 'vendor/pdf-lib.min.js';
+        s.onload = function() { resolve(window.PDFLib); };
+        s.onerror = function() { pdfLibLoading = null; reject(fail('PDFを読む部品を読み込めませんでした。ページを再読み込みしてから、もう一度読み込んでください')); };
+        document.head.appendChild(s);
+      });
+    }
+    return pdfLibLoading;
+  }
+
+  function decodeName(str) {
+    if (!/[^\x20-\x7e]/.test(str)) return str;
+    var bytes = Uint8Array.from(str, function(c) { return c.charCodeAt(0) & 255; });
+    try { return new TextDecoder('utf-8', { fatal: true }).decode(bytes); } catch (e) {}
+    try { return new TextDecoder('shift_jis').decode(bytes); } catch (e) {}
+    return str;
+  }
+
+  function parsePDF(file) {
+    if (file.size > PDF_MAX) return Promise.reject(fail('PDFが大きすぎるので読みませんでした(400MBまで)。章ごとに分けたPDFなら読めます'));
+    return loadPdfLib().then(function(L) {
+      return file.arrayBuffer().then(function(buf) {
+        return L.PDFDocument.load(buf, { ignoreEncryption: true, updateMetadata: false }).catch(function() {
+          var head = new TextDecoder('latin1').decode(new Uint8Array(buf, Math.max(0, buf.byteLength - 4096)));
+          if (/\/Encrypt/.test(head)) throw fail('パスワードや制限が付いたPDFのようです。入稿できないことが多いので、制限なしで書き出し直してください');
+          throw fail('PDFとして読めませんでした。書き出し直してみてください');
+        });
+      }).then(function(doc) {
+        var N = L.PDFName;
+        var look = function(o) { return o instanceof L.PDFRef ? doc.context.lookup(o) : o; };
+        var boxMM = function(arr) {
+          var nums = look(arr).asArray().map(function(n) { return look(n).asNumber(); });
+          return [Math.abs(nums[2] - nums[0]) / 72 * MM_PER_INCH, Math.abs(nums[3] - nums[1]) / 72 * MM_PER_INCH];
+        };
+        var info = { format: 'PDF', pdfPages: [], fonts: Object.create(null), unembedded: Object.create(null), encrypted: !!doc.isEncrypted };
+        doc.getPages().forEach(function(page) {
+          var node = page.node;
+          var trim = node.lookupMaybe(N.of('TrimBox'), L.PDFArray);
+          var bleed = node.lookupMaybe(N.of('BleedBox'), L.PDFArray);
+          var rot = node.Rotate ? node.Rotate() : null;
+          var deg = rot ? ((look(rot).asNumber() % 360) + 360) % 360 : 0;
+          var p = { media: boxMM(node.MediaBox()) };
+          if (trim) p.trim = boxMM(trim);
+          if (bleed) p.bleed = boxMM(bleed);
+          if (deg === 90 || deg === 270) {
+            ['media', 'trim', 'bleed'].forEach(function(k) { if (p[k]) p[k] = [p[k][1], p[k][0]]; });
+          }
+          info.pdfPages.push(p);
+          collectFonts(L, look, node.Resources(), info, 0);
+        });
+        return info;
+      });
+    });
+  }
+
+  function collectFonts(L, look, res, info, depth) {
+    res = look(res);
+    if (!(res instanceof L.PDFDict) || depth > 4) return;
+    var N = L.PDFName;
+    var fonts = look(res.get(N.of('Font')));
+    if (fonts instanceof L.PDFDict) {
+      fonts.entries().forEach(function(kv) {
+        var f = look(kv[1]);
+        if (!(f instanceof L.PDFDict)) return;
+        var sub = look(f.get(N.of('Subtype')));
+        var baseObj = look(f.get(N.of('BaseFont')));
+        var name = baseObj && baseObj.decodeText ? decodeName(baseObj.decodeText()) : '(名前なし)';
+        var key = name + '|' + (kv[1] instanceof L.PDFRef ? kv[1].toString() : '');
+        if (info.fonts[key]) return;
+        info.fonts[key] = true;
+        if (sub && sub.toString() === '/Type3') return;
+        var desc = f;
+        if (sub && sub.toString() === '/Type0') {
+          var dfs = look(f.get(N.of('DescendantFonts')));
+          desc = dfs instanceof L.PDFArray ? look(dfs.get(0)) : null;
+        }
+        var fd = desc instanceof L.PDFDict ? look(desc.get(N.of('FontDescriptor'))) : null;
+        var embedded = fd instanceof L.PDFDict && (fd.has(N.of('FontFile')) || fd.has(N.of('FontFile2')) || fd.has(N.of('FontFile3')));
+        if (!embedded) info.unembedded[name.replace(/^[A-Z]{6}\+/, '')] = true;
+      });
+    }
+    // フォームXObjectの中のフォントも見る
+    var xo = look(res.get(N.of('XObject')));
+    if (xo instanceof L.PDFDict) {
+      xo.entries().forEach(function(kv) {
+        var x = look(kv[1]);
+        var dict = x && x.dict ? x.dict : null;
+        if (!dict) return;
+        var st = look(dict.get(N.of('Subtype')));
+        if (st && st.toString() === '/Form') collectFonts(L, look, dict.get(N.of('Resources')), info, depth + 1);
+      });
+    }
+  }
+
+  function parseFile(file) {
+    var e = ext(file.name);
+    if (file.size === 0) return Promise.reject(fail('ファイルが空(0バイト)です'));
+    if (e === 'png') return parsePNG(file);
+    if (e === 'jpg' || e === 'jpeg') return parseJPEG(file);
+    if (e === 'psd' || e === 'psb') return parsePSD(file);
+    if (e === 'pdf') return parsePDF(file);
+    if (e === 'tif' || e === 'tiff') return Promise.resolve({ format: 'TIFF', unread: true });
+    return Promise.resolve({ format: 'CLIP', clip: true });
+  }
+
+  // ---------- 判定 ----------
+  function settings() {
+    var size = $('size').value;
+    var wh, custom = size === 'custom' || size === 'shinsho';
+    if (custom) wh = [parseFloat($('customW').value), parseFloat($('customH').value)];
+    else wh = SIZES[size];
+    var valid = wh.every(function(v) { return v >= 30 && v <= 600; });
+    var b = parseFloat(radio('bleed')) || 3;
+    return {
+      kind: radio('kind'), color: radio('color'), bind: radio('bind'), valid: valid, custom: custom,
+      trim: wh, bleed: b, bleedSize: [wh[0] + b * 2, wh[1] + b * 2]
+    };
+  }
+
+  function partOf(name) {
+    if (/口絵|kuchie/i.test(name)) return 'kuchie';
+    if (/表紙|表[1-4１-４]|cover|hyou|hyoshi|(^|[^a-z0-9])h[1-4](?![0-9])/i.test(name)) return 'cover';
+    return 'body';
+  }
+
+  var MODE_LABEL = { bitmap: 'モノクロ2階調', gray: 'グレー', indexed: 'インデックスカラー', rgb: 'RGB', cmyk: 'CMYK', multi: 'マルチチャンネル', duotone: 'ダブルトーン', lab: 'Lab', other: 'その他' };
+
+  function near(a, b, tol) { return Math.abs(a - b) <= tol; }
+  function ratioMatch(w, h, mm) { return Math.abs((w / h) / (mm[0] / mm[1]) - 1) < 0.006; }
+  function mmText(wh) { return round1(wh[0]) + '×' + round1(wh[1]) + 'mm'; }
+  // ファイルに書かれたdpiを、大きさの判定に使ってよいか(72・96や小さすぎる値は書き出しの初期値のことが多い)
+  function usableDpi(d) { return d && d >= 150 && Math.abs(d - 72) > 0.5 && Math.abs(d - 96) > 0.5; }
+
+  function judgeImage(it, s) {
+    var msgs = [];
+    var add = function(lv, t) { msgs.push([lv, t]); };
+    var inf = it.info;
+    var mono = s.color === 'mono';
+    var cover = it.part !== 'body';
+    // 必要な解像度(2階調は本の色に関係なく600)
+    var needDpi, minDpi;
+    if (inf.mode === 'bitmap') { needDpi = 600; minDpi = 600; }
+    else if (!mono) { needDpi = 350; minDpi = 300; }
+    else { needDpi = 600; minDpi = 300; }
+
+    if (cover) {
+      add('info', it.part === 'kuchie' ? '口絵として扱いました(口絵の数え方は印刷所で違うので、ページ数に入れていません)' : '表紙として扱いました(大きさは背幅で変わるので判定していません)');
+    } else if (s.valid) {
+      var W = s.trim[0], H = s.trim[1], b = s.bleed;
+      var targets = [
+        { key: 'bleed', mm: s.bleedSize },
+        { key: 'trim', mm: s.trim },
+        { key: 'spread', mm: [W * 2 + b * 2, H + b * 2] },
+        { key: 'spread', mm: [W * 2, H + b * 2] },
+        { key: 'spread', mm: [W * 2 + b * 4, H + b * 2] }
+      ];
+      var hit = null;
+      for (var i = 0; i < targets.length && !hit; i++) if (ratioMatch(inf.w, inf.h, targets[i].mm)) hit = targets[i];
+      var fileDpi = usableDpi(inf.dpiX) ? inf.dpiX : null;
+      var effDpi = null;
+
+      if (hit) {
+        effDpi = inf.w / (hit.mm[0] / MM_PER_INCH);
+        var byDpi = fileDpi ? [inf.w / fileDpi * MM_PER_INCH, inf.h / fileDpi * MM_PER_INCH] : null;
+        var sizeOff = byDpi && !(near(byDpi[0], hit.mm[0], 2) && near(byDpi[1], hit.mm[1], 2));
+        if (sizeOff) {
+          add('err', '縦横の比率は合っていますが、ファイルに書かれたdpi(' + Math.round(fileDpi) + ')で計算すると約' + mmText(byDpi) + 'で、設定の' + mmText(hit.mm) + 'と違います。仕上がりサイズの設定が違うか、原稿を拡大・縮小しているかもしれません(拡大・縮小した原稿は受け付けない印刷所が多いです)');
+          effDpi = null;
+        } else if (hit.key === 'bleed') add('ok', '塗り足し込みのサイズ(' + mmText(s.bleedSize) + ')に合っています');
+        else if (hit.key === 'trim') {
+          if (s.kind === 'novel') add('ok', '仕上がりサイズ(塗り足しなし)です。文字だけの本文なら、これで入稿できる印刷所が多いです');
+          else add('warn', '塗り足しがないかもしれません(仕上がりサイズの比率です)。絵が紙の端まであるページは、上下左右に' + b + 'mmずつ足してください');
+        } else {
+          add('warn', '見開き2ページを1枚にした画像のようです。1ページずつに分けるか、見開きのまま入稿できるか印刷所に確かめてください');
+        }
+        if (effDpi && !fileDpi) {
+          var tooBig = inf.mode === 'bitmap' ? effDpi > 1260 : effDpi > needDpi * 1.3;
+          if (tooBig) add('warn', 'ピクセル数がかなり多いです(設定のサイズなら約' + Math.round(effDpi) + 'dpi)。原稿の大きさが設定より大きい(例: A5の本にB5の原稿)かもしれないので、サイズを確かめてください');
+        }
+      } else {
+        var d = fileDpi || needDpi;
+        var real = [inf.w / d * MM_PER_INCH, inf.h / d * MM_PER_INCH];
+        var basis = fileDpi ? 'ファイルに書かれたdpi(' + Math.round(fileDpi) + ')' : needDpi + 'dpi';
+        if (real[0] > s.bleedSize[0] - 1 && real[1] > s.bleedSize[1] - 1) {
+          add('warn', '縦横の比率が塗り足し込みのサイズと合いません(' + basis + 'で約' + mmText(real) + ')。トンボや余白付きのキャンバスなら、原寸で中央に置かれていれば受け付ける印刷所もあります。そうでなければサイズを確かめてください');
+        } else {
+          add('err', '縦横の比率が' + (s.kind === 'novel' ? '仕上がりサイズとも' : '') + '塗り足し込みのサイズ(' + mmText(s.bleedSize) + ')とも合いません(' + basis + 'で約' + mmText(real) + ')。サイズの設定と原稿の大きさを確かめてください');
+        }
+      }
+
+      // 解像度
+      if (effDpi) {
+        var e = Math.round(effDpi);
+        if (effDpi >= needDpi * 0.99) add('ok', '解像度はピクセル数から見て約' + e + 'dpiです');
+        else if (effDpi >= minDpi * 0.99) add('warn', '解像度はピクセル数から見て約' + e + 'dpiです。' + (mono ? 'トーン(アミ点)を使っているなら600dpiが安心です' : 'カラーは350dpiが目安です'));
+        else add('err', '解像度が足りません。ピクセル数から見て約' + e + 'dpiで、' + needDpi + 'dpi(最低でも' + minDpi + 'dpi)が目安です' + (inf.mode === 'bitmap' ? '(モノクロ2階調は600dpi以上が目安です)' : ''));
+        if (inf.dpiX && Math.abs(inf.dpiX - effDpi) / effDpi > 0.03) {
+          add('info', 'ファイルに書かれたdpiの数値は' + Math.round(inf.dpiX) + 'です。ピクセル数から見ると約' + e + 'dpi相当なので、書き出すときにdpiの数値も合わせておくと確実です');
+        }
+      }
+    }
+    if (inf.dpiConflict) add('info', 'ファイルの中に、違うdpiの数値が2つ以上書かれています');
+
+    // 色(表紙・口絵はカラーのことが多いので、本文の色の設定とは比べない)
+    if (!cover) {
+      if (mono && (inf.mode === 'rgb' || inf.mode === 'cmyk' || inf.mode === 'indexed')) {
+        add('warn', 'モノクロ本なのに' + MODE_LABEL[inf.mode] + 'で書き出されています。グレースケールかモノクロ2階調で書き出すのが安全です(トーンが崩れることがあります)');
+      } else if (!mono && (inf.mode === 'gray' || inf.mode === 'bitmap')) {
+        add('info', 'カラー本の設定ですが、この画像は' + MODE_LABEL[inf.mode] + 'です。白黒のページならそのままで大丈夫です');
+      }
+    }
+    if (inf.mode === 'lab' || inf.mode === 'multi' || inf.mode === 'duotone' || (inf.mode === 'indexed' && (!mono || cover))) {
+      add('warn', MODE_LABEL[inf.mode] + 'は受け付けない印刷所が多いです。' + (mono && !cover ? 'グレースケール' : 'RGBかCMYK') + 'で書き出してください');
+    }
+    if (inf.alpha) add('warn', '透明な部分(アルファチャンネル)が残っています。背景を白で塗りつぶしてから書き出すと安全です');
+    if (inf.extraCh) add('warn', '色のほかにチャンネル(透明や特色)が残っています。統合して書き出すと安全です');
+    if (inf.format === 'JPEG' && mono && !cover) add('warn', 'モノクロ原稿をJPEGにすると、トーンや線がにじみやすくなります。PNGかPSDの方が安全です');
+    if (inf.format === 'JPEG' && (!mono || cover)) add('info', 'JPEGを受け付けない印刷所もあります。使う印刷所の受付形式を確かめてください');
+    if (inf.bits === 16 || inf.bits === 32) add('warn', inf.bits + 'bitの画像です。8bitで書き出すよう求める印刷所が多いです');
+    if (inf.layers && inf.layers > 1) add('warn', 'レイヤーが' + inf.layers + '枚残っています。レイヤーを統合して書き出すよう求める印刷所が多いです');
+    if (inf.format === 'PSB') add('warn', 'PSB(大きいドキュメント形式)です。PSDで保存し直せるか確かめてください');
+    return msgs;
+  }
+
+  function judgePDF(it, s) {
+    var msgs = [];
+    var add = function(lv, t) { msgs.push([lv, t]); };
+    var inf = it.info;
+    var n = inf.pdfPages.length;
+    if (!n) return [['err', 'ページが1つもないPDFです。書き出し直してください']];
+    add('info', n + 'ページのPDFです');
+    if (inf.encrypted) add('warn', 'パスワードや制限が付いたPDFです。入稿できないことが多いので、制限なしで書き出し直してください');
+    if (it.part !== 'body') {
+      add('info', it.part === 'kuchie' ? '口絵として扱いました(ページ数に入れていません)' : '表紙として扱いました(大きさは判定していません)');
+    } else if (s.valid) {
+      var tol = 0.6;
+      var bad = [], trimOnly = [], usedTrim = false;
+      inf.pdfPages.forEach(function(p, i) {
+        if (p.trim && (p.media[0] - p.trim[0] > 2 || p.media[1] - p.trim[1] > 2)) {
+          // 仕上がり線(TrimBox)が入っているPDF: 仕上がり線の大きさと塗り足し(BleedBox)で見る
+          usedTrim = true;
+          if (!(near(p.trim[0], s.trim[0], tol) && near(p.trim[1], s.trim[1], tol))) { bad.push(i + 1); return; }
+          var hasBleed = p.bleed && p.bleed[0] - p.trim[0] >= s.bleed * 2 - tol && p.bleed[1] - p.trim[1] >= s.bleed * 2 - tol;
+          var mediaBig = p.media[0] - p.trim[0] >= s.bleed * 2 - tol && p.media[1] - p.trim[1] >= s.bleed * 2 - tol;
+          if (!hasBleed && !(mediaBig && !p.bleed)) trimOnly.push(i + 1);
+          return;
+        }
+        var size = p.media;
+        if (near(size[0], s.bleedSize[0], tol) && near(size[1], s.bleedSize[1], tol)) return;
+        if (near(size[0], s.trim[0], tol) && near(size[1], s.trim[1], tol)) trimOnly.push(i + 1);
+        else bad.push(i + 1);
+      });
+      var p0 = inf.pdfPages[0];
+      var first = usedTrim && p0.trim ? p0.trim : p0.media;
+      if (usedTrim) add('info', 'PDFに仕上がり線(TrimBox)が入っているので、その大きさで見ました');
+      if (bad.length) {
+        add('err', listPages(bad, n) + 'の大きさが設定と合いません(1ページ目は' + mmText(first) + '、設定は仕上がり' + mmText(s.trim) + '/塗り足し込み' + mmText(s.bleedSize) + ')');
+      }
+      if (trimOnly.length) {
+        if (s.kind === 'novel') add('ok', listPages(trimOnly, n) + 'は塗り足しなしの仕上がりサイズです。文字だけの本文なら、これで入稿できる印刷所が多いです');
+        else add('warn', listPages(trimOnly, n) + 'は塗り足しがありません。絵が紙の端まであるページは塗り足しが要ります');
+      }
+      if (!bad.length && !trimOnly.length) add('ok', 'ページの大きさは設定と合っています');
+    }
+    var un = Object.keys(inf.unembedded);
+    if (un.length) add('err', '埋め込まれていないフォントがあります: ' + un.slice(0, 6).join('、') + (un.length > 6 ? ' ほか' + (un.length - 6) + '個' : '') + '。PDFを書き出すときに「フォントを埋め込む」を選んでください');
+    else if (Object.keys(inf.fonts).length) add('ok', 'フォントはすべて埋め込まれています');
+    add('info', 'PDFの中の画像の解像度とカラーモードは見ていません');
+    return msgs;
+  }
+
+  function listPages(arr, total) {
+    if (total && arr.length === total) return '全ページ';
+    if (arr.length > 8) return arr.slice(0, 8).join('・') + 'ページほか(全' + arr.length + 'ページ)';
+    return arr.join('・') + 'ページ';
+  }
+
+  function judgeItem(it, s) {
+    var inf = it.info;
+    if (it.error) return [['err', '読めませんでした: ' + it.error]];
+    if (inf.clip) return [['err', 'クリスタの.clipのままでは入稿できないことが多いです。PSDかPNGで書き出してください(このファイルはページ数に入れていません)']];
+    if (inf.unread) return [['info', 'TIFFの中身はこのツールでは読めません(TIFFで入稿できる印刷所も多いです)。ページ数と連番だけ数えました']];
+    if (inf.format === 'PDF') return judgePDF(it, s);
+    return judgeImage(it, s);
+  }
+
+  // ページとして数えるファイルか(.clipは書き出す前のファイルなので数えない)
+  function isPageFile(it) { return it.part === 'body' && !(it.info && it.info.clip); }
+  function pagesOf(it) { return it.info && it.info.pdfPages ? it.info.pdfPages.length : 1; }
+
+  function judgeNames(list) {
+    var msgs = [];
+    var add = function(lv, t) { msgs.push([lv, t]); };
+    var body = list.filter(isPageFile);
+    var nums = [], noNum = [], notLeading = [], nonAscii = [], widths = {}, rangeBad = [];
+    body.forEach(function(it) {
+      var base = it.name.replace(/\.[^.]+$/, '');
+      var range = /^(\d+)\s*[-_~〜]\s*(\d+)/.exec(base);
+      var multi = it.info && it.info.pdfPages && it.info.pdfPages.length > 1;
+      if (multi && !range) return;  // 本文が1つにまとまったPDFは連番の対象にしない
+      if (/[^\x21-\x7e]/.test(it.name)) nonAscii.push(it.name);
+      if (range) {
+        var a = parseInt(range[1], 10), z = parseInt(range[2], 10);
+        widths[range[1].length] = true;
+        if (z < a) { noNum.push(it.name); return; }
+        for (var k = a; k <= z; k++) nums.push(k);
+        if (it.info && it.info.pdfPages && !it.error && it.info.pdfPages.length !== z - a + 1) rangeBad.push(it.name + '(名前は' + (z - a + 1) + 'ページ分、中身は' + it.info.pdfPages.length + 'ページ)');
+        return;
+      }
+      var lead = /^(\d+)/.exec(base);
+      var any = lead || /(\d+)(?!.*\d)/.exec(base);
+      if (!any) { noNum.push(it.name); return; }
+      if (!lead) notLeading.push(it.name);
+      widths[any[1].length] = true;
+      nums.push(parseInt(any[1], 10));
+    });
+    if (nums.length + noNum.length < 2) return msgs;
+    if (noNum.length) add('err', 'ページ番号が入っていないファイルがあります: ' + noNum.slice(0, 5).join('、') + (noNum.length > 5 ? ' ほか' : '') + '(表紙・口絵なら、名前に「表紙」「口絵」を入れると本文から外します)');
+    if (rangeBad.length) add('warn', 'ファイル名のページの範囲と、PDFのページ数が合いません: ' + rangeBad.slice(0, 3).join('、'));
+    var seen = {}, dup = [];
+    nums.forEach(function(x) { if (seen[x] && dup.indexOf(x) < 0) dup.push(x); seen[x] = true; });
+    if (dup.length) add('err', '同じ番号のページが2つ以上あります: ' + dup.slice(0, 10).join('、') + '番');
+    if (nums.length) {
+      var ns = nums.slice().sort(function(a, b) { return a - b; });
+      var lo = ns[0], hi = ns[ns.length - 1], miss = [];
+      for (var k = lo; k <= hi && miss.length < 30; k++) if (!seen[k]) miss.push(k);
+      if (miss.length) add('err', '番号が抜けています: ' + miss.join('、') + '番' + (miss.length >= 30 ? ' ほか' : '') + '(白紙ページなら、その番号の白紙ファイルを入れるか、印刷所に白紙と伝えてください)');
+      else if (!dup.length) add('ok', lo + '〜' + hi + '番まで抜けなく並んでいます');
+      if (lo > 1 && lo <= 3) add('info', '本文が' + lo + '番から始まっています。表紙に1〜' + (lo - 1) + '番を使っているなら問題ありません');
+      else if (lo > 3) add('warn', '本文が' + lo + '番から始まっています。先頭のファイルを読み込み忘れていないか確かめてください');
+    }
+    if (Object.keys(widths).length > 1) add('warn', '番号の桁がそろっていません(例: 1.png と 10.png)。01、02…や001、002…のように桁をそろえると、並び順がずれません');
+    if (notLeading.length) add('warn', '番号がファイル名の先頭にないファイルがあります(例: ' + notLeading[0] + ')。番号を先頭に置くよう求める印刷所が多いです');
+    if (nonAscii.length) add('warn', '全角文字やスペースを含むファイル名があります(例: ' + nonAscii[0] + ')。半角英数字だけにすると安全です');
+    return msgs;
+  }
+
+  function judgePages(list, s) {
+    var msgs = [];
+    var add = function(lv, t) { msgs.push([lv, t]); };
+    var body = 0, failed = 0, skipped = 0, multiPdf = 0;
+    list.forEach(function(it) {
+      if (it.part !== 'body') { skipped++; return; }
+      if (!isPageFile(it)) return;
+      if (it.error) { failed++; return; }
+      body += pagesOf(it);
+      if (pagesOf(it) > 1) multiPdf++;
+    });
+    if (!body) return msgs;
+    var total = body + 4;
+    add('info', '本文' + body + 'ページ+表紙4ページ(表1〜表4)=総ページ数' + total + 'ページとして数えました' + (skipped ? '(表紙・口絵のファイル' + skipped + 'つは本文に入れていません)' : ''));
+    if (failed) add('warn', '読めなかったファイルが' + failed + 'つあるので、ページ数は正しくない可能性があります');
+    if (multiPdf > 1) add('warn', '何ページもあるPDFが' + multiPdf + 'つあります。差し替え前の古いPDFが混ざっていないか確かめてください(ページ数は合計で数えています)');
+    if (s.bind === 'saddle') {
+      if (total % 4) {
+        var addN = 4 - total % 4;
+        add('err', '中綴じは総ページ数が4の倍数でないと作れません。本文をあと' + addN + 'ページ(白紙でも可)足すと' + (total + addN) + 'ページになります');
+      } else add('ok', '総ページ数' + total + 'ページは4の倍数で、中綴じにできます');
+      if (total > 64) add('warn', '中綴じは40〜64ページくらいまでの印刷所が多いです。無線綴じも考えてください');
+      if (total < 8) add('warn', '中綴じは8ページ以上からの印刷所が多いです');
+    } else {
+      if (total % 2) add('err', '総ページ数が奇数です。本の最後に白紙を1ページ足すなどして、偶数にしてください');
+      else if (total % 4) add('warn', '総ページ数' + total + 'ページは2の倍数です。料金やページの刻みが4ページ・8ページ単位の印刷所もあるので確かめてください');
+      else add('ok', '総ページ数' + total + 'ページは偶数(4の倍数)です');
+      if (total < 20) add('warn', '無線綴じは10〜20ページ以上からの印刷所が多いです。' + total + 'ページなら中綴じも考えてください');
+      if (s.kind === 'novel') add('info', '小説向けのお得なセットは、ページ数の下限が高いこともあります(40ページ台からなど)');
+    }
+    return msgs;
+  }
+
+  // ---------- 表示 ----------
+  var LV = { err: ['要確認', 'lv-err'], warn: ['注意', 'lv-warn'], ok: ['OK', 'lv-ok'], info: ['メモ', 'lv-info'] };
+  function msgList(msgs) {
+    return msgs.map(function(m) { return '<li class="' + LV[m[0]][1] + '"><strong>' + LV[m[0]][0] + '</strong>' + esc(m[1]) + '</li>'; }).join('');
+  }
+  function worst(msgs) {
+    var order = ['err', 'warn', 'ok', 'info'];
+    for (var i = 0; i < order.length; i++) if (msgs.some(function(m) { return m[0] === order[i]; })) return order[i];
+    return 'info';
+  }
+
+  var lastCounts = null;
+  function render() {
+    var s = settings();
+    syncCustomError(s);
+    if (!items.length) { $('results').hidden = true; return; }
+    var counts = { err: 0, warn: 0, ok: 0 };
+    var rows = items.map(function(it) {
+      var msgs = judgeItem(it, s);
+      var w = worst(msgs);
+      msgs.forEach(function(m) { if (m[0] === 'err' || m[0] === 'warn') counts[m[0]]++; });
+      if (w === 'ok') counts.ok++;
+      var inf = it.info || {};
+      var p0 = inf.pdfPages && inf.pdfPages[0];
+      var dim = inf.w ? inf.w + '×' + inf.h + 'px' : (p0 ? mmText(p0.trim || p0.media) : '—');
+      var col = inf.mode ? MODE_LABEL[inf.mode] + (inf.bits && inf.bits !== 8 && inf.mode !== 'bitmap' ? '(' + inf.bits + 'bit)' : '') : '—';
+      var tag = it.part === 'cover' ? '表紙' : it.part === 'kuchie' ? '口絵' : '';
+      return '<tr><th scope="row">' + esc(it.name) + (tag ? ' <span class="badge lv-info">' + tag + '</span>' : '') + '</th><td data-label="形式">' + esc(inf.format || '') + '</td><td data-label="大きさ">' + esc(dim) + '</td><td data-label="色">' + esc(col) + '</td><td data-label="判定"><span class="badge ' + LV[w][1] + '">' + LV[w][0] + '</span><ul class="msgs">' + msgList(msgs) + '</ul></td></tr>';
+    });
+    var pm = judgePages(items, s), nm = judgeNames(items);
+    [pm, nm].forEach(function(ms) { ms.forEach(function(m) { if (m[0] === 'err' || m[0] === 'warn') counts[m[0]]++; }); });
+    $('fileRows').innerHTML = rows.join('');
+    $('pageMsgs').innerHTML = msgList(pm) || '<li class="lv-info"><strong>メモ</strong>ページ数を数えられるファイルがありません</li>';
+    $('nameMsgs').innerHTML = msgList(nm) || '<li class="lv-info"><strong>メモ</strong>連番を見るファイルが1つ以下なので、連番は見ていません(1つにまとめた本文PDFは連番の対象外です)</li>';
+    $('summary').innerHTML = (s.valid ? '' : '<li class="lv-err">仕上がりサイズを入れると、大きさも判定します</li>') + '<li class="lv-err">要確認の項目 ' + counts.err + '</li><li class="lv-warn">注意の項目 ' + counts.warn + '</li><li class="lv-ok">OKのファイル ' + counts.ok + '/' + items.length + '</li>';
+    $('results').hidden = false;
+    lastCounts = counts;
+  }
+
+  function syncCustomError(s) {
+    var show = s.custom && !s.valid;
+    ['customW', 'customH'].forEach(function(id) {
+      var v = parseFloat($(id).value);
+      $(id).setAttribute('aria-invalid', s.custom && !(v >= 30 && v <= 600) ? 'true' : 'false');
+    });
+    $('customHint').classList.toggle('bad', show);
+    $('customHint').textContent = $('size').value === 'shinsho'
+      ? '新書は印刷所によって大きさが違います(例: 105×173mm、107×175mm、112×176mmなど)。使う印刷所の入稿ガイドにある仕上がりサイズを入れてください。'
+      : '仕上がり(切ったあと)の大きさを、横と縦のmmで入れてください(30〜600mm)。';
+  }
+
+  function naturalCompare(a, b) { return a.name.localeCompare(b.name, 'ja', { numeric: true }); }
+
+  function addFiles(fileList) {
+    var all = Array.prototype.slice.call(fileList).filter(function(f) { return !/^\./.test(f.name) && !/^(thumbs\.db|desktop\.ini)$/i.test(f.name); });
+    var files = all.filter(function(f) { return EXTS.indexOf(ext(f.name)) >= 0; });
+    var ignored = all.length - files.length;
+    if (!files.length) {
+      $('status').textContent = ignored ? '原稿の形式(PNG・JPEG・PSD・PDFなど)のファイルがありませんでした(' + ignored + '件は対象外)。' : '';
+      return;
+    }
+    queue = queue.then(function() { return readAll(files, ignored); });
+  }
+
+  function readAll(files, ignored) {
+    var total = files.length, done = 0, replaced = 0;
+    $('status').textContent = total + '件を読み込んでいます…';
+    var chain = Promise.resolve();
+    files.forEach(function(f) {
+      chain = chain.then(function() {
+        var key = f.webkitRelativePath || f.name;
+        var it = { name: f.name, key: key, part: partOf(f.name) };
+        return parseFile(f).then(function(info) { it.info = info; }, function(err) {
+          it.info = { format: ext(f.name).toUpperCase() };
+          it.error = err && err.userMsg ? err.message : (ext(f.name) === 'pdf' ? 'PDFとして読めませんでした。書き出し直してみてください' : 'ファイルが壊れているかもしれません。書き出し直してみてください');
+        }).then(function() {
+          var at = -1;
+          for (var i = 0; i < items.length; i++) if (items[i].key === key || items[i].name === f.name) { at = i; break; }
+          if (at >= 0) { items[at] = it; replaced++; } else items.push(it);
+          done++;
+          if (done % 10 === 0 && done < total) $('status').textContent = done + ' / ' + total + '件を読み込みました…';
+        });
+      });
+    });
+    return chain.then(function() {
+      items.sort(naturalCompare);
+      render();
+      var c = lastCounts || { err: 0, warn: 0 };
+      $('status').textContent = items.length + '件をチェックしました(要確認' + c.err + '・注意' + c.warn + ')。結果は下の「3. チェック結果」にあります。'
+        + (replaced ? '同じ名前の' + replaced + '件は新しいファイルに入れ替えました。' : '')
+        + (ignored ? '原稿ではない' + ignored + '件は読み込んでいません。' : '');
+      track('check_run', { kind: radio('kind') });
+    });
+  }
+
+  // ---------- 画面の操作 ----------
+  function syncSize() {
+    $('customSize').hidden = !(settings().custom);
+  }
+  function syncKind() {
+    $('kindHint').textContent = radio('kind') === 'novel'
+      ? '小説は、塗り足しなしの仕上がりサイズでもOKにします(文字だけの本文なら、多くの印刷所で入稿できます)。'
+      : '絵が紙の端まである漫画は、塗り足し込みのサイズで作ります。';
+  }
+
+  $('size').addEventListener('change', function() { syncSize(); render(); });
+  ['customW', 'customH'].forEach(function(id) { $(id).addEventListener('input', render); });
+  document.querySelectorAll('#settings input[type="radio"]').forEach(function(r) {
+    r.addEventListener('change', function() { syncKind(); render(); });
+  });
+  $('fileInput').addEventListener('change', function(e) { addFiles(e.target.files); e.target.value = ''; });
+  $('dirInput').addEventListener('change', function(e) { addFiles(e.target.files); e.target.value = ''; });
+  if (!('webkitdirectory' in document.createElement('input')) || /iP(hone|ad|od)/.test(navigator.userAgent)) {
+    $('dirLabel').hidden = true;
+  }
+  $('clearBtn').addEventListener('click', function() {
+    items = []; render(); $('status').textContent = '読み込んだファイルを消しました。'; $('fileInput').focus();
+  });
+  var drop = $('drop');
+  ['dragenter', 'dragover'].forEach(function(t) { drop.addEventListener(t, function(e) { e.preventDefault(); drop.classList.add('over'); }); });
+  ['dragleave', 'drop'].forEach(function(t) { drop.addEventListener(t, function(e) { e.preventDefault(); drop.classList.remove('over'); }); });
+  drop.addEventListener('drop', function(e) {
+    var dt = e.dataTransfer;
+    if (!dt) return;
+    var entries = dt.items ? Array.prototype.map.call(dt.items, function(i) { return i.webkitGetAsEntry ? i.webkitGetAsEntry() : null; }).filter(Boolean) : [];
+    if (entries.some(function(en) { return en.isDirectory; })) {
+      readEntries(entries).then(addFiles);
+    } else {
+      addFiles(dt.files);
+    }
+  });
+  function readEntries(entries) {
+    var out = [];
+    function walk(en) {
+      if (en.isFile) return new Promise(function(res) { en.file(function(f) { out.push(f); res(); }, function() { res(); }); });
+      if (en.isDirectory) {
+        var reader = en.createReader();
+        return new Promise(function(res) {
+          var all = [];
+          (function more() {
+            reader.readEntries(function(batch) {
+              if (!batch.length) { Promise.all(all.map(walk)).then(res); return; }
+              all = all.concat(Array.prototype.slice.call(batch)); more();
+            }, function() { res(); });
+          })();
+        });
+      }
+      return Promise.resolve();
+    }
+    return Promise.all(entries.map(walk)).then(function() { return out; });
+  }
+  // ページ外へのドロップでファイルが開いてしまうのを防ぐ
+  window.addEventListener('dragover', function(e) { e.preventDefault(); });
+  window.addEventListener('drop', function(e) { e.preventDefault(); });
+
+  syncSize(); syncKind(); syncCustomError(settings());
+})();
+</script>
+</body>
+</html>

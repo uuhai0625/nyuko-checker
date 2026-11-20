@@ -875,8 +875,9 @@
     var nums = [], noNum = [], notLeading = [], nonAscii = [], widths = {}, rangeBad = [];
     body.forEach(function(it) {
       var base = it.name.replace(/\.[^.]+$/, '');
-      var range = /^(\d+)\s*[-_~〜]\s*(\d+)/.exec(base);
       var multi = it.info && it.info.pdfPages && it.info.pdfPages.length > 1;
+      // 「05-48.pdf」のようにファイル名全体がページの範囲のPDFだけ範囲として読む(「02_16bit.png」を範囲と取り違えない)
+      var range = it.info && it.info.format === 'PDF' ? /^(\d+)\s*[-_~〜]\s*(\d+)$/.exec(base) : null;
       if (multi && !range) return;  // 本文が1つにまとまったPDFは連番の対象にしない
       if (/[^\x21-\x7e]/.test(it.name)) nonAscii.push(it.name);
       if (range) {
@@ -935,7 +936,7 @@
       if (total % 4) {
         var addN = 4 - total % 4;
         add('err', '中綴じは総ページ数が4の倍数でないと作れません。本文をあと' + addN + 'ページ(白紙でも可)足すと' + (total + addN) + 'ページになります');
-      } else add('ok', '総ページ数' + total + 'ページは4の倍数で、中綴じにできます');
+      } else add('ok', '総ページ数' + total + 'ページは4の倍数です' + (total <= 64 ? '(中綴じの決まりに合っています)' : ''));
       if (total > 64) add('warn', '中綴じは40〜64ページくらいまでの印刷所が多いです。無線綴じも考えてください');
       if (total < 8) add('warn', '中綴じは8ページ以上からの印刷所が多いです');
     } else {

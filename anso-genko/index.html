@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<script>
+  (function() {
+    var GA_ID = 'G-X3D5LHK698';
+    var isLocalDev = ['localhost', '127.0.0.1', '[::1]', ''].includes(location.hostname);
+    if (isLocalDev) return;
+    try { if (/[?&]no_ga=0(&|$)/.test(location.search)) localStorage.removeItem('no_ga'); if (/[?&]no_ga=1(&|$)/.test(location.search)) localStorage.setItem('no_ga', '1'); if (localStorage.getItem('no_ga') === '1') return; } catch (e) {}
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+    document.head.appendChild(s);
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function(){ dataLayer.push(arguments); };
+    gtag('js', new Date());
+    gtag('config', GA_ID);
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>アンソロ主催の原稿の集め方|ログインなしで受け取る方法・ファイル名・要項に書くこと</title>
+<meta name="description" content="アンソロジー・合同誌の主催向け。Googleフォームのファイル提出は参加者にGoogleへのログインが要ります。ログインなしで原稿を受け取る方法の比較、ファイル名の決め方、要項に書くこと、受け取ったあとの管理表までまとめました。">
+<link rel="canonical" href="https://uuhai0625.github.io/nyuko-checker/anso-genko/">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:site_name" content="uuhai0625のツール">
+<meta property="og:title" content="アンソロ・合同誌の原稿の集め方|ログインなしで受け取る方法とファイル名">
+<meta property="og:description" content="Googleフォームのファイル提出はログインが要る。ログインなしで受け取る方法、ファイル名の決め方、要項に書くこと。">
+<meta property="og:url" content="https://uuhai0625.github.io/nyuko-checker/anso-genko/">
+<meta property="og:image" content="https://uuhai0625.github.io/nyuko-checker/og.png">
+<meta property="og:image:alt" content="入稿まえチェッカー 同人誌の原稿データを入稿前にチェック">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "アンソロ主催の原稿の集め方|ログインなしで受け取る方法・ファイル名・要項に書くこと",
+  "description": "アンソロジー・合同誌の主催向け。Googleフォームのファイル提出は参加者にGoogleへのログインが要ります。ログインなしで原稿を受け取る方法の比較、ファイル名の決め方、要項に書くこと、受け取ったあとの管理表までまとめました。",
+  "image": "https://uuhai0625.github.io/nyuko-checker/og.png",
+  "publisher": { "@type": "Person", "name": "uuhai0625", "url": "https://x.com/uuhai0625" },
+  "url": "https://uuhai0625.github.io/nyuko-checker/anso-genko/",
+  "mainEntityOfPage": "https://uuhai0625.github.io/nyuko-checker/anso-genko/",
+  "inLanguage": "ja",
+  "datePublished": "2026-11-21",
+  "dateModified": "2026-11-21",
+  "author": { "@type": "Person", "name": "uuhai0625", "url": "https://x.com/uuhai0625" }
+}
+</script>
+<style>
+  :root {
+    --bg: #f4f4ef; --panel: #ffffff; --border: #dfdccf; --text: #2a2c2a; --muted: #5c5e56;
+    --accent: #2f5d50; --accent-dark: #22463c; --soft: #edf3f0; --warn-bg: #fff4e0; --warn-text: #7a4b00; --focus: #2560c4;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif; background: var(--bg); color: var(--text); line-height: 1.8; }
+  header { background: linear-gradient(135deg, var(--accent), var(--accent-dark)); color: #fff; padding: 14px 20px; }
+  header a { color: #fff; font-weight: bold; text-decoration: none; }
+  header a:hover { text-decoration: underline; }
+  main { max-width: 860px; margin: 0 auto; padding: 22px 16px 50px; }
+  article { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 20px 22px; }
+  h1 { font-size: 1.4rem; line-height: 1.5; margin: 0 0 8px; }
+  h2 { font-size: 1.15rem; margin: 30px 0 10px; padding-left: 10px; border-left: 4px solid var(--accent); }
+  h3 { font-size: 1rem; margin: 18px 0 6px; }
+  .meta { color: var(--muted); font-size: .85rem; margin: 0 0 14px; }
+  .point { background: var(--soft); border-radius: 10px; padding: 12px 16px; margin: 14px 0; }
+  .point ul { margin: 0; padding-left: 1.2em; }
+  .note { border-left: 4px solid var(--warn-text); background: var(--warn-bg); padding: 10px 14px; border-radius: 6px; font-size: .92rem; margin: 12px 0; }
+  .table-wrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: .9rem; margin: 8px 0; }
+  th, td { border: 1px solid var(--border); padding: 7px 9px; text-align: left; vertical-align: top; }
+  thead th { background: #f7f6f1; }
+  tbody th { background: #fbfaf6; }
+  code { background: #f0efe8; padding: 1px 5px; border-radius: 4px; font-size: .92em; }
+  ol li, ul li { margin: 4px 0; }
+  a { color: var(--accent-dark); }
+  :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+  .cta { margin: 28px 0 8px; padding: 16px 18px; border: 2px solid var(--accent); border-radius: 12px; background: var(--soft); }
+  .cta h2 { margin-top: 0; border: 0; padding: 0; }
+  .btn { display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 8px; background: var(--accent); color: #fff; font-weight: bold; text-decoration: none; }
+  .btn:hover { background: var(--accent-dark); }
+  .src { font-size: .82rem; color: var(--muted); }
+  footer { text-align: center; font-size: .82rem; color: var(--muted); padding: 10px 16px 30px; }
+  footer a { color: inherit; }
+  @media (max-width: 600px) {
+    article { padding: 16px 14px; }
+    h1 { font-size: 1.2rem; }
+    table { font-size: .84rem; }
+    table.wide { min-width: 600px; }
+    table.cards, table.cards tbody, table.cards tr, table.cards th, table.cards td { display: block; width: 100%; }
+    table.cards thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    table.cards tr { border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px; overflow: hidden; }
+    table.cards th, table.cards td { border: 0; border-bottom: 1px solid var(--border); }
+    table.cards td:last-child { border-bottom: 0; }
+    table.cards td[data-label]::before { content: attr(data-label) ": "; display: block; color: var(--muted); font-size: .78rem; font-weight: bold; }
+  }
+</style>
+</head>
+<body>
+<header><a href="../">入稿まえチェッカー</a></header>
+<main>
+<article>
+<h1>アンソロ主催の原稿の集め方|ログインなしで受け取る方法・ファイル名・要項に書くこと</h1>
+<p class="meta">更新日: 2026年11月21日 ・ アンソロジー・合同誌・生誕企画の主催の方向け ・ 書いた人: 入稿まえチェッカーの作者</p>
+
+<p>アンソロジーの主催でつまずきやすいのが、原稿の受け取りです。Googleフォームでファイルを集めようとすると、参加者にGoogleアカウントへのログインが求められます。このページでは、原稿の集め方の比較と、あとで困らないファイル名の決め方、受け取ったあとの管理をまとめました。</p>
+
+<div class="point">
+<ul>
+<li>Googleフォームの「ファイルのアップロード」の質問は、<b>答える人がGoogleアカウントにログインしていないと使えません</b></li>
+<li>ログインなしで出してもらうなら、<b>ファイル転送サービスのURLをフォームで送ってもらう</b>か、<b>Dropboxのファイルリクエスト</b>を使う方法があります</li>
+<li>ファイル名は<b>半角の「参加者番号_ページ番号」</b>で出してもらい、入稿の前に主催者が通し番号に付け替えると、取り違えが起きにくくなります</li>
+<li>集まった原稿のサイズ・解像度・ページ数は、<a href="../">入稿まえチェッカー</a>でまとめて確かめられます</li>
+</ul>
+</div>
+
+<h2 id="hikaku">原稿の集め方の比較</h2>
+<div class="table-wrap" tabindex="0" role="region" aria-label="原稿の集め方の比較">
+<table class="cards">
+<thead><tr><th scope="col">方法</th><th scope="col">出す人のログイン</th><th scope="col">主催者に要るもの</th><th scope="col">気をつけること</th></tr></thead>
+<tbody>
+<tr><th scope="row">Googleフォームの「ファイルのアップロード」</th><td data-label="出す人のログイン">要る(Googleアカウント)</td><td data-label="主催者に要るもの">Googleアカウント</td><td data-label="気をつけること">アカウントを持っていない人・ログインしたくない人が出せない。ファイルは主催者のGoogleドライブのフォルダに入る。フォームを共有ドライブに置いている場合など、この質問自体を使えないことがある</td></tr>
+<tr><th scope="row">ファイル転送サービス(ギガファイル便など)のURLを、フォームで送ってもらう</th><td data-label="出す人のログイン">要らない</td><td data-label="主催者に要るもの">フォームを作るアカウント</td><td data-label="気をつけること">保存期間を過ぎると消える(ギガファイル便の保存期間は最長100日で、初めは7日)。期限内にダウンロードする</td></tr>
+<tr><th scope="row">Dropboxのファイルリクエスト</th><td data-label="出す人のログイン">要らない</td><td data-label="主催者に要るもの">Dropboxのアカウント(無料のBasicでも作れる)</td><td data-label="気をつけること">受け取ったファイルは主催者のDropboxの容量を使う(Basicの容量は2GBで、空きが足りないと出す側でエラーになる)。締切の設定は一部の有料プランだけ</td></tr>
+<tr><th scope="row">Googleドライブの共有フォルダ</th><td data-label="出す人のログイン">要る(Googleアカウント)</td><td data-label="主催者に要るもの">Googleアカウント</td><td data-label="気をつけること">リンクを知っている全員が編集できる設定にすると、参加者どうしで互いの原稿が見えてしまう</td></tr>
+<tr><th scope="row">メール・DM</th><td data-label="出す人のログイン">(それぞれのサービス)</td><td data-label="主催者に要るもの">連絡先</td><td data-label="気をつけること">添付できる大きさに上限があり、大きなPSDやZIPは送れないことがある。やり取りが人ごとに散らばり、出したかどうかの確認が大変</td></tr>
+</tbody>
+</table>
+</div>
+<p>どれが正解というより、<b>参加者がアカウントを持っているか</b>と<b>主催者がどこで管理したいか</b>で選びます。参加者の幅が広い企画なら、ログインの要らない方法をひとつ用意しておくと、出せない人が出にくくなります。</p>
+<p>Googleフォームのまま、スクリプト(GAS)やアドオンでログインなしのアップロードを作る方法もあります。ただ、設定に手間がかかり、うまく動かないときに主催者が自分で直す必要があります。原稿の受け取りのためだけなら、上の表の方法のほうが手軽です。</p>
+
+<h2 id="tensou">ファイル転送サービス+フォームで集める手順</h2>
+<p>ログインの要らない組み合わせの例です。フォームにはファイルの質問を置かず、文字の質問だけにします。</p>
+<ol>
+<li>フォームに「ペンネーム」「参加者番号」「ダウンロードURL」「ダウンロードキー(パスワード)」「ページ数」「ひとこと(あとがき・告知用のアカウントなど)」の欄を作ります</li>
+<li>フォームの設定で、ログインが必要になる項目(「回答を1回に制限する」など)はオフにしておきます(<a href="https://support.google.com/docs/answer/2839588?hl=ja" rel="noopener">Googleのヘルプ</a>)</li>
+<li>要項に「ファイルをまとめてZIPにし、ファイル転送サービスに上げて、URLとダウンロードキーをフォームで送ってください。保存期間は○日以上にしてください」と書きます</li>
+<li>届いたら、期限が切れる前にダウンロードして、受け取ったことを参加者に知らせます</li>
+</ol>
+<p class="note">ギガファイル便のダウンロードキー(半角英数字4文字)は、アップロードした人が任意で付けるもので、あとから再発行はできません。付けないと、URLを知った人も受け取れる形になります。付けてもらうと、URLだけが漏れたときに他人に開かれにくくなります。</p>
+
+<h2 id="filename">ファイル名の決め方</h2>
+<p>参加者ごとに好きな名前で出してもらうと、入稿の前の並べ替えで取り違えが起きやすくなります。おすすめは、<b>出してもらう名前</b>と<b>入稿するときの名前</b>を分けることです。</p>
+<h3>参加者に出してもらう名前</h3>
+<ul>
+<li>形: <code>参加者番号_ページ番号.拡張子</code>(例: <code>A03_01.png</code>、<code>A03_02.png</code>)</li>
+<li>参加者番号は主催者が先に決めて伝えます(例: 参加が決まった順にA01、A02…と振り、参加確定の連絡で知らせる)。ペンネームは全角になりやすく、ファイル名に半角英数字を求める印刷所もあるので、ファイル名には入れず、フォームで別に聞きます</li>
+<li>ページ番号は桁をそろえます(<code>1</code>ではなく<code>01</code>)。小説などで1つのPDFにまとめるなら<code>A03.pdf</code>のように参加者番号だけにします</li>
+<li>スペース・記号・機種依存文字は使いません</li>
+</ul>
+<h3>入稿するときの名前</h3>
+<ul>
+<li>台割(どのページに誰の原稿を置くかの表)が決まったら、主催者が本全体の通し番号に付け替えます(例: <code>A03_01.png</code> → <code>015.png</code>)</li>
+<li>番号の付け方(名前の先頭に置く・何桁にするか)は印刷所ごとに決まりがあるので、使う印刷所の入稿ガイドで確かめます</li>
+</ul>
+
+<h2 id="youkou">要項に書いておくこと</h2>
+<p>入稿の決まりは印刷所ごとに違います(JPEGを受け付けない所もあります)。<b>先に印刷所を決め、その入稿ガイドに合わせて</b>要項を書くと、集めたあとで出し直してもらう手間が減ります。</p>
+<ul>
+<li>仕上がりサイズ・塗り足しの幅・解像度・カラーモード(モノクロ/グレー/カラー)</li>
+<li>受け付けるファイル形式と、1人あたりのページ数(本全体のページ数が、印刷所のページの単位に合うように割り振る)</li>
+<li>ノンブル(ページ番号)を参加者が入れるか、主催者がまとめて入れるか。入れるなら位置と大きさ</li>
+<li>ファイル名の付け方(上の例)</li>
+<li>提出の方法と締切。修正をお願いする場合の再提出の締切(印刷所の入稿締切から、確認と直しの期間を引いて決める)</li>
+<li>預かった原稿を何に使い、いつ消すか(例: 「頒布と再録の確認が終わったら消します」)。フォームの回答(ペンネーム・連絡先・ダウンロードキー)を見られる人と、消す時期も</li>
+<li>権利のこと: 著作権は作者に残ること、アンソロに載せる範囲、再録・Webに載せてよい時期、献本の有無</li>
+<li>成人向けの表現の扱い(受け付けるか、修正(モザイク・白抜きなど)の基準は印刷所と頒布するイベントの決まりに合わせる)。成人向けの企画では、18歳未満の方の参加を受け付けないことも書きます。使うサービスの利用規約でも、成人向けの画像の扱いを確かめておきます</li>
+</ul>
+
+<h2 id="kanri">受け取ったあとの管理</h2>
+<p>主催者の手間が大きいのは、受け取ったあとの「届きました」「ここを直してください」のやり取りです。表を1枚作り、人ごとに状態を書いておくと、催促や修正のお願いの漏れが減ります。</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="管理表の例">
+<table class="wide">
+<thead><tr><th scope="col">参加者番号</th><th scope="col">ペンネーム</th><th scope="col">提出日</th><th scope="col">受け取りの連絡</th><th scope="col">確認の結果</th><th scope="col">修正のお願い</th><th scope="col">最終OK</th></tr></thead>
+<tbody>
+<tr><td>A01</td><td>(例)</td><td>12/1</td><td>済</td><td>OK</td><td>なし</td><td>済</td></tr>
+<tr><td>A02</td><td>(例)</td><td>12/3</td><td>済</td><td>塗り足しなし</td><td>12/4に連絡</td><td></td></tr>
+<tr><td>A03</td><td>(例)</td><td></td><td></td><td></td><td></td><td></td></tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>受け取りの連絡は、中身を確かめる前でも早めに送ると、参加者が「届いたかな」と不安にならずに済みます</li>
+<li>同じ直しを何人にもお願いしそうなときは、要項を直して全員に知らせるほうが早く済みます</li>
+<li>締切の数日前に、まだの人だけに声をかけます</li>
+</ul>
+
+<section class="cta" aria-labelledby="ctaTitle">
+<h2 id="ctaTitle">集まった原稿を、まとめて確かめる</h2>
+<p class="src">このページを書いた人が作っている無料ツールです。</p>
+<p>入稿まえチェッカーは、原稿ファイル(PNG・JPEG・PSD・PDF)をまとめて読み込むと、塗り足し込みのサイズ・解像度・カラーモード・ページ数・ファイル名の連番の抜けを一覧にする無料ツールです。原稿ファイルはブラウザの中だけで読み、外には送りません。参加者の原稿のサイズや解像度がそろっているかを、入稿の前に確かめるのに使えます。</p>
+<p><a class="btn" href="../">入稿まえチェッカーを使う</a></p>
+<p class="src">チェック結果は目安です。入稿の前には、使う印刷所の入稿ガイドで最終確認してください。</p>
+</section>
+
+<p class="src">このページの各サービスの仕様は、2026年11月21日時点の公式ヘルプで確かめました(<a href="https://support.google.com/docs/answer/7322334?hl=ja" rel="noopener">Googleフォームのファイルのアップロード</a>・<a href="https://help.dropbox.com/ja-jp/share/create-file-request" rel="noopener">Dropboxのファイルリクエスト</a>・<a href="https://gigafile.nu/support.php" rel="noopener">ギガファイル便のサポート</a>)。仕様は変わることがあるので、使う前に各サービスの案内を確かめてください。このページで紹介した各サービスとは関係がなく、紹介料も受け取っていません。</p>
+
+<h2 id="related">同人誌づくりの関連ツール</h2>
+<ul>
+<li><a href="../">入稿まえチェッカー</a>(原稿データのサイズ・解像度・ページ数を確かめる)</li>
+<li><a href="https://uuhai0625.github.io/daiwari-maker/">台割作成ツール</a>(ページの並びを決める)</li>
+<li><a href="https://uuhai0625.github.io/genko-page-calc/">原稿用紙換算・小説ページ数計算</a></li>
+<li><a href="https://uuhai0625.github.io/sehaba-calc/">同人誌 背幅計算</a></li>
+</ul>
+</article>
+</main>
+<footer>
+  <p>作成: uuhai0625(個人開発) ・ 不具合・ご質問は<a href="https://x.com/uuhai0625" rel="noopener">X(@uuhai0625)</a>へ ・ <a href="https://uuhai0625.github.io/" rel="noopener">ほかのツール</a></p>
+  <p>アクセス解析にGoogle Analyticsを使っています(見たページのURLなど。くわしくは<a href="../#anshin">データの扱いについて</a>)。</p>
+</footer>
+</body>
+</html>
